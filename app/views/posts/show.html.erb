@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<%= link_to 'Edit', edit_post_path(@post), :class => "top-btn btn btn-secondary", :role => "button" %> 
+<%= link_to 'Delete', @post, method: :delete, data: { confirm: 'Are you sure?' }, :class => "top-btn btn btn-secondary", :role => "button" %> 
+
+<div class = "row bg-light">
+  <div class="col-lg-12 col-md-12">
+    <article class="post-preview">
+      <%= link_to @post do %>
+        <h2 class="post-title"><%= @post.title %></h2>
+      <% end %>
+      <p><%= @post.content %></p>
+      <p class="post-meta">Posted by
+        <%= get_username(@post.user_id) %> on 
+        <%= get_datetime(@post.created_at) %>
+      </p>
+    </article>
+  </div>
+</div>
+<hr>
+<div class = "row bg-light">
+  <div class="comment-col col-lg-12 col-md-12">
+   
+    <% @comments.each do |comment| %>
+      <div class="comment-row row">
+        <span class="comment-body"><%= comment.body %></span>
+        <span class="comment-by"> &nbsp; - - by 
+        <%= get_username(comment.user_id)%> &nbsp;on 
+        <%= get_datetime(comment.created_at)%>
+        <span class="row-action">
+          <%= link_to 'Edit', edit_comment_path(comment), :class => "row-btn btn btn-secondary", :role => "button" %> 
+          <%= link_to 'Delete', comment_path(comment), method: :delete, data: { confirm: 'Are you sure?' }, :class => "row-btn btn btn-secondary", :role => "button" %>
+        <span>
+      </div>
+    <% end %>
+    <%= render partial: 'comments/form', locals: { comment: @comment } %>
+    <%= link_to 'Back', posts_path, :class => "back-btn btn btn-secondary", :role => "button" %> 
+  </div>
+</div>
+

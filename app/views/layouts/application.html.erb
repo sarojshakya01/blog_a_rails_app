@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Blog</title>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <%= link_to "The Blog", "/", class: "navbar-brand" %>
+        
+        <div>
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <%= link_to "+ Post New Blog", new_post_path, class: "nav-link" %>
+            </li>
+          </ul>
+        </div>
+        <div class="navbar userinfo float-right">
+        <% if user_signed_in? %>
+          <strong><%= current_user.email %></strong>&nbsp;
+          <%= link_to "Edit profile", edit_user_registration_path, :class => 'navbar-link' %> &nbsp;|&nbsp;
+          <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+        <% else %>
+          <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
+          <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
+        <% end %>
+      </div>
+      </div>
+     
+    </nav>
+    
+    <div class="container">
+      <%= yield %>
+    </div>
+  </body>
+  <footer>
+    <div class="container">
+      <div class="footer">Copyright &copy; The Blog <%= Time.now.year %>
+    </div>
+  </footer>
+</html>

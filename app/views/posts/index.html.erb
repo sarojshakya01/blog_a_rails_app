@@ -1,0 +1,19 @@
+<div class = "row">
+  <div class="col-lg-12 col-md-12">
+    
+    <% @posts.each do |post| %>
+      <article class="post-preview">
+        <%= link_to post do %>
+          <h2 class="post-title"><%= post.title %></h2>
+          <h3 class="post-subtitle"><%= post.subtitle %></h3>
+        <% end %>
+        <p class="post-meta">Posted by
+            <%= get_username(post.user_id) %> on 
+            <%= get_datetime(post.created_at) %>
+          </p>
+      </article>
+      <hr>
+    <% end %>
+  </div>
+</div>
+
