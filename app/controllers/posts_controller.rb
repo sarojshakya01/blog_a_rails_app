@@ -46,11 +46,10 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1.json
   def update
     authorize @post
-    # abort post_params.inspect
 
     respond_to do |format|
       if @post.update_attributes(post_params)
-        if post_params["is_approced"]
+        if post_params["is_approved"]
           PostMailer.post_approved(current_user, @post).deliver
         end
         format.html { redirect_to @post, notice: "Post has been successfully updated." }
