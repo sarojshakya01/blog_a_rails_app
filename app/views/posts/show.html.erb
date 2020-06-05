@@ -1,13 +1,14 @@
-<p id="notice"><%= notice %></p>
-
-<%= link_to 'Edit', edit_post_path(@post), :class => "top-btn btn btn-secondary", :role => "button" %> 
-<%= link_to 'Delete', @post, method: :delete, data: { confirm: 'Are you sure?' }, :class => "top-btn btn btn-secondary", :role => "button" %> 
-
+<%if notice %>
+  <p id="notice"><%= notice %></p>
+<% end %>
 <div class = "row bg-light">
   <div class="col-lg-12 col-md-12">
-    <article class="post-preview">
-      <%= link_to @post do %>
-        <h2 class="post-title"><%= @post.title %></h2>
+    <article class="post">
+      <h2 class="post-title"><%= @post.title %></h2>
+      <% if @post.image? %>
+        <div class="image-wrapper">
+          <%== image_tag(@post.image.url, alt: 'Image') %>
+        </div>
       <% end %>
       <p><%= @post.content %></p>
       <p class="post-meta">Posted by
@@ -15,26 +16,42 @@
         <%= get_datetime(@post.created_at) %>
       </p>
     </article>
+    <% if is_admin? || (is_my_post?(@post.id) && !@post.is_approved) %>
+      <%= link_to 'Edit', edit_post_path(@post), :class => "top-btn btn btn-secondary", :role => "button" %>
+      <%= link_to 'Delete', @post, method: :delete, data: { confirm: 'Are you sure?' }, :class => "top-btn btn btn-secondary", :role => "button" %>
+    <% end %>
+    <% if is_admin? && !@post.is_approved %>
+      <%= form_for(@post) do |f| %>
+        <%= f.hidden_field :is_approved, :value => true %>
+        <%= f.hidden_field :approved_by, :value => @post.user_id %>
+        <%= f.hidden_field :approved_date, :value => Time.now.getutc %>
+        <div class="form-group">
+          <%= f.submit "Approve", class: "approve-btn btn btn-secondary" %>
+        </div>
+      <% end %>
+      <%# <%= link_to 'Approve', @post, params: {ram: "1"},  method: :patch, data: {confirm: 'Are you sure?' }, :class => "top-btn btn btn-secondary", :role => "button" %>
+    <% end %>
   </div>
 </div>
 <hr>
 <div class = "row bg-light">
   <div class="comment-col col-lg-12 col-md-12">
-   
-    <% @comments.each do |comment| %>
+    <% @post.comments.each do |comment| %>
       <div class="comment-row row">
         <span class="comment-body"><%= comment.body %></span>
         <span class="comment-by"> &nbsp; - - by 
-        <%= get_username(comment.user_id)%> &nbsp;on 
-        <%= get_datetime(comment.created_at)%>
-        <span class="row-action">
-          <%= link_to 'Edit', edit_comment_path(comment), :class => "row-btn btn btn-secondary", :role => "button" %> 
-          <%= link_to 'Delete', comment_path(comment), method: :delete, data: { confirm: 'Are you sure?' }, :class => "row-btn btn btn-secondary", :role => "button" %>
-        <span>
+          <%= get_username(comment.user_id)%> &nbsp;on 
+          <%= get_datetime(comment.created_at)%>
+          <% if is_admin? || is_my_post?(@post.id) %>
+            <span class="row-action">
+              <%= link_to 'Edit', edit_comment_path(comment), :class => "row-btn btn btn-secondary", :role => "button" %>
+              <%= link_to 'Delete', comment_path(comment), method: :delete, data: { confirm: 'Are you sure?' }, :class => "row-btn btn btn-secondary", :role => "button" %>
+            </span>
+          <% end %>
+        </span>
       </div>
     <% end %>
-    <%= render partial: 'comments/form', locals: { comment: @comment } %>
-    <%= link_to 'Back', posts_path, :class => "back-btn btn btn-secondary", :role => "button" %> 
+    <%= render partial: 'comments/form', locals: { comment: @post.comments.build } %>
+    <%= link_to 'Back', posts_path, :class => "back-btn btn btn-secondary", :role => "button" %>
   </div>
 </div>
-

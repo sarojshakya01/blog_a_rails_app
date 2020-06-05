@@ -4,12 +4,13 @@ class CommentsController < ApplicationController
   # GET /comments
   # GET /comments.json
   def index
-    @comments = Comment.order(created_at: :desc)
+    render :file => "#{Rails.root}/public/404.html", :status => 404, :layout => false
   end
 
   # GET /comments/1
   # GET /comments/1.json
   def show
+    render :file => "#{Rails.root}/public/404.html", :status => 404, :layout => false
   end
 
   # GET /comments/new
@@ -26,12 +27,12 @@ class CommentsController < ApplicationController
   # POST /comments.json
   def create
     @comment = Comment.new(comment_params)
-    post_id = comment_params['post_id']
-    
+    post_id = comment_params["post_id"]
+
     @post = Post.find(post_id)
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to @post, notice: 'Comment was successfully created.' }
+        format.html { redirect_to @post, notice: "Comment was successfully created." }
         format.json { render :show, status: :created, location: @comment }
       else
         format.html { render :new }
@@ -44,12 +45,12 @@ class CommentsController < ApplicationController
   # PATCH/PUT /comments/1.json
   def update
     authorize @comment
-    post_id = comment_params['post_id']
-    
+    post_id = comment_params["post_id"]
+
     @post = Post.find(post_id)
     respond_to do |format|
       if @comment.update(comment_params)
-        format.html { redirect_to @post, notice: 'Comment was successfully updated.' }
+        format.html { redirect_to @post, notice: "Comment has been successfully updated." }
         format.json { render :show, status: :ok, location: @comment }
       else
         format.html { render :edit }
@@ -65,19 +66,20 @@ class CommentsController < ApplicationController
     @post = Post.find(@comment.post_id)
     @comment.destroy
     respond_to do |format|
-      format.html { redirect_to @post, notice: 'Comment was successfully deleted.' }
+      format.html { redirect_to @post, notice: "Comment has been successfully deleted." }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_comment
-      @comment = Comment.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def comment_params
-      params.require(:comment).permit(:user_id, :body, :post_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_comment
+    @comment = Comment.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def comment_params
+    params.require(:comment).permit(:user_id, :body, :post_id)
+  end
 end

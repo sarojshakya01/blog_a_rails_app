@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+      /* Email styles need to be inline */
+    </style>
+  </head>
+  <body>
+    <p>Your following pending blog has been approved. </p>
+    <p>Post Title: <%= @post.title %></p>
+    <p>Post Content: <%= truncate(@post.content, length: 100) %></p>
+    <%= yield %>
+  </body>
+</html>

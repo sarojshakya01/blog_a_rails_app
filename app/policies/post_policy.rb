@@ -1,7 +1,6 @@
 class PostPolicy < ApplicationPolicy
-
   def update?
-    user.user_role == "admin"
+    user.user_role == "admin" || !record.is_approved
   end
 
   def show?
