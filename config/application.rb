@@ -9,10 +9,11 @@ Bundler.require(*Rails.groups)
 module Blog
   class Application < Rails::Application
     config.action_dispatch.default_headers = {
+      # "X-Frame-Options" => "DENY",
       # "X-Frame-Options" => "ALLOWALL",
-      "X-Frame-Options" => "ALLOW-FROM http://localhost/iframetest/",
-      "X-XSS-Protection" => "1; mode=block",
-      "X-Content-Type-Options" => "nosniff",
+      # "X-Frame-Options" => "ALLOW-FROM http://iframe.demo.com:8000/",
+      # "X-XSS-Protection" => "1; mode=block",
+      # "X-Content-Type-Options" => "nosniff",
     }
 
     # Settings in config/environments/* take precedence over those specified here.
