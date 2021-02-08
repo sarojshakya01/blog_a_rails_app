@@ -59,7 +59,7 @@ gem "pundit"
 gem "bootstrap-sass", "~> 3.4.1"
 
 # File upload
-gem "carrierwave", "~> 1.0"
+gem "carrierwave", "~> 1.3"
 
 # devise jwt
 gem 'devise-jwt', '~> 0.6.0'
